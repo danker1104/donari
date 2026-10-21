@@ -19,7 +19,7 @@
       "root": "content/v2/silhouette/",
       "manifest": "manifest.json",
       "audio": "KANA-BOON - Silhouette.mp3",
-      "background": "BG12.jpg",
+      "background": "BG12.png",
       "previewTimeMs": 44757,
       "difficulties": [
         {

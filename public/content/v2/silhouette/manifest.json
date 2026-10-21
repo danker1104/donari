@@ -15,6 +15,18 @@
       "sourceSha256": "66bb2fee1557f797c936b2a80939160eb0a38575ad38681ce742c397e20722c7"
     },
     {
+      "path": "BG12.png",
+      "sourceRoot": "beatmap",
+      "sourceRelativePath": "BG12.png",
+      "transformation": "copy",
+      "role": "image",
+      "bytes": 1731133,
+      "sourceBytes": 1731133,
+      "mediaType": "image/png",
+      "sha256": "4d846de73fc34a33c090cf0a79274aaebe2e7f6fa6609a877a92f3dba168a10b",
+      "sourceSha256": "4d846de73fc34a33c090cf0a79274aaebe2e7f6fa6609a877a92f3dba168a10b"
+    },
+    {
       "path": "KANA-BOON - Silhouette (Kagetsu) [Easy].osu",
       "sourceRoot": "beatmap",
       "sourceRelativePath": "KANA-BOON - Silhouette (Kagetsu) [Easy].osu",
@@ -23,8 +35,8 @@
       "bytes": 7349,
       "sourceBytes": 7349,
       "mediaType": "text/plain; charset=utf-8",
-      "sha256": "0ddc4163b77dcf4e2df3209163e366802f13eb0abfc720f48d1fce4398d90ab9",
-      "sourceSha256": "0ddc4163b77dcf4e2df3209163e366802f13eb0abfc720f48d1fce4398d90ab9"
+      "sha256": "8cc913c00b70804031fca8f2cf2dbc0b106a4aa14aaa118a5fd1c0b67a2b1d16",
+      "sourceSha256": "8cc913c00b70804031fca8f2cf2dbc0b106a4aa14aaa118a5fd1c0b67a2b1d16"
     },
     {
       "path": "KANA-BOON - Silhouette (Kagetsu) [Kage].osu",
@@ -35,8 +47,8 @@
       "bytes": 14398,
       "sourceBytes": 14398,
       "mediaType": "text/plain; charset=utf-8",
-      "sha256": "13dcb26c0eeddd1c7a05211c946ac3c73a2c3c9e88926d3d4c2413f03f4771dd",
-      "sourceSha256": "13dcb26c0eeddd1c7a05211c946ac3c73a2c3c9e88926d3d4c2413f03f4771dd"
+      "sha256": "fcf6898869efc19d7d2f39edb6b62672a2b278e76f66284e8cfd28840e37db40",
+      "sourceSha256": "fcf6898869efc19d7d2f39edb6b62672a2b278e76f66284e8cfd28840e37db40"
     },
     {
       "path": "KANA-BOON - Silhouette (Kagetsu) [Mamayu's Insane].osu",
@@ -47,8 +59,8 @@
       "bytes": 16618,
       "sourceBytes": 16618,
       "mediaType": "text/plain; charset=utf-8",
-      "sha256": "55706ab246f854257d057f00a651a633ddef921b108d59fc2599598625104e5d",
-      "sourceSha256": "55706ab246f854257d057f00a651a633ddef921b108d59fc2599598625104e5d"
+      "sha256": "b17ecc1eee73ed86bf36e0efcf623381cd34e57c86449d39e0b26d6703479287",
+      "sourceSha256": "b17ecc1eee73ed86bf36e0efcf623381cd34e57c86449d39e0b26d6703479287"
     },
     {
       "path": "KANA-BOON - Silhouette (Kagetsu) [Normal].osu",
@@ -59,8 +71,8 @@
       "bytes": 9363,
       "sourceBytes": 9363,
       "mediaType": "text/plain; charset=utf-8",
-      "sha256": "8852412d16c8f6a6b845abef3229b5f4132bcc6bbe411459165bdd2fee6038ae",
-      "sourceSha256": "8852412d16c8f6a6b845abef3229b5f4132bcc6bbe411459165bdd2fee6038ae"
+      "sha256": "5ce77cc606b94d4cf2b1513a7b8403df4888aef43abf69b72e46db558e5c9818",
+      "sourceSha256": "5ce77cc606b94d4cf2b1513a7b8403df4888aef43abf69b72e46db558e5c9818"
     },
     {
       "path": "KANA-BOON - Silhouette (Kagetsu) [pkhg's Insane].osu",
@@ -71,8 +83,8 @@
       "bytes": 15133,
       "sourceBytes": 15133,
       "mediaType": "text/plain; charset=utf-8",
-      "sha256": "1f8ed0e8c373e00216eea0f2dd1303c9b2dca49c3632688e487f10f40219699b",
-      "sourceSha256": "1f8ed0e8c373e00216eea0f2dd1303c9b2dca49c3632688e487f10f40219699b"
+      "sha256": "75ad22f9828806e9cb917e72652330975c809f8aacefa375c6347704b68de9e0",
+      "sourceSha256": "75ad22f9828806e9cb917e72652330975c809f8aacefa375c6347704b68de9e0"
     },
     {
       "path": "KANA-BOON - Silhouette (Kagetsu) [Rocket's Hard].osu",
@@ -83,8 +95,8 @@
       "bytes": 14092,
       "sourceBytes": 14092,
       "mediaType": "text/plain; charset=utf-8",
-      "sha256": "33230447645d7ef347d5bcc46c5212c2672ff971a76dffc514a903e2bcc7598b",
-      "sourceSha256": "33230447645d7ef347d5bcc46c5212c2672ff971a76dffc514a903e2bcc7598b"
+      "sha256": "b9bede72a444f6467e34b79a1a41855e774fb07430dd86ec93c5bec7982bfb58",
+      "sourceSha256": "b9bede72a444f6467e34b79a1a41855e774fb07430dd86ec93c5bec7982bfb58"
     },
     {
       "path": "KANA-BOON - Silhouette (Kagetsu) [Yiyo's Insane].osu",
@@ -95,8 +107,8 @@
       "bytes": 16066,
       "sourceBytes": 16066,
       "mediaType": "text/plain; charset=utf-8",
-      "sha256": "be05a28946d6723c5722c10e6f5502f105e72cedf6a8cc59d66e082b61ede1c8",
-      "sourceSha256": "be05a28946d6723c5722c10e6f5502f105e72cedf6a8cc59d66e082b61ede1c8"
+      "sha256": "ef9c07bd8d804104b5b890c47d8fdc21901c191852e6cd998f026010cdf21806",
+      "sourceSha256": "ef9c07bd8d804104b5b890c47d8fdc21901c191852e6cd998f026010cdf21806"
     },
     {
       "path": "KANA-BOON - Silhouette.mp3",

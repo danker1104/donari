@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "budgetBytes": 36700160,
-  "contentBytes": 20162113,
+  "contentBytes": 21893246,
   "storyboardReferences": {
     "total": 14,
     "unique": 2
@@ -9,7 +9,7 @@
   "byRole": {
     "audio": 17405509,
     "beatmap": 93019,
-    "image": 2659575,
+    "image": 4390708,
     "skin-config": 4010
   },
   "files": [
@@ -18,6 +18,12 @@
       "path": "BG12.jpg",
       "role": "image",
       "bytes": 1029074
+    },
+    {
+      "sourceRoot": "beatmap",
+      "path": "BG12.png",
+      "role": "image",
+      "bytes": 1731133
     },
     {
       "sourceRoot": "beatmap",
