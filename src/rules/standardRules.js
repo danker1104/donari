@@ -2,8 +2,9 @@
 
 /** @typedef {'SS' | 'S' | 'A' | 'B' | 'C' | 'D'} Rank */
 
-export const RULESET_VERSION = 5;
+export const RULESET_VERSION = 6;
 export const BEGINNER_HIT_WINDOW_MULTIPLIER = 1.25;
+export const HIT_300_GRACE_MS = 8;
 
 /**
  * @param {number} approachRate
@@ -35,7 +36,7 @@ export function circleSizeToRadius(circleSize) {
  */
 export function getHitWindows(overallDifficulty) {
   return {
-    hit300: (80 - 6 * overallDifficulty) * BEGINNER_HIT_WINDOW_MULTIPLIER,
+    hit300: (80 - 6 * overallDifficulty) * BEGINNER_HIT_WINDOW_MULTIPLIER + HIT_300_GRACE_MS,
     hit100: (140 - 8 * overallDifficulty) * BEGINNER_HIT_WINDOW_MULTIPLIER,
     hit50: (200 - 10 * overallDifficulty) * BEGINNER_HIT_WINDOW_MULTIPLIER,
   };

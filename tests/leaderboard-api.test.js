@@ -1,9 +1,10 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { createLeaderboardHandler, validateSubmission } from '../api/leaderboard.js';
+import { RULESET_VERSION } from '../src/rules/standardRules.js';
 
-const boardKey = 'silhouette-399358:892534:5';
-const result = { id: 'ca77a729-e70a-4cee-8772-7ce54a1d6690', songId: 'silhouette-399358', beatmapId: 892534, rulesetVersion: 5,
+const boardKey = `silhouette-399358:892534:${RULESET_VERSION}`;
+const result = { id: 'ca77a729-e70a-4cee-8772-7ce54a1d6690', songId: 'silhouette-399358', beatmapId: 892534, rulesetVersion: RULESET_VERSION,
   cleared: true, score: 30000, maxCombo: 100, accuracy: 0, rank: 'D', judgements: { 300: 100, 100: 0, 50: 0, miss: 0 } };
 const env = { SUPABASE_URL: 'https://example.supabase.co', SUPABASE_SERVICE_ROLE_KEY: 'test-server-secret' };
 async function invoke(options = {}, request = {}) {
