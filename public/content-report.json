@@ -1,0 +1,1301 @@
+{
+  "schemaVersion": 1,
+  "budgetBytes": 36700160,
+  "contentBytes": 20162113,
+  "storyboardReferences": {
+    "total": 14,
+    "unique": 2
+  },
+  "byRole": {
+    "audio": 17405509,
+    "beatmap": 93019,
+    "image": 2659575,
+    "skin-config": 4010
+  },
+  "files": [
+    {
+      "sourceRoot": "beatmap",
+      "path": "BG12.jpg",
+      "role": "image",
+      "bytes": 1029074
+    },
+    {
+      "sourceRoot": "beatmap",
+      "path": "KANA-BOON - Silhouette (Kagetsu) [Easy].osu",
+      "role": "beatmap",
+      "bytes": 7349
+    },
+    {
+      "sourceRoot": "beatmap",
+      "path": "KANA-BOON - Silhouette (Kagetsu) [Kage].osu",
+      "role": "beatmap",
+      "bytes": 14398
+    },
+    {
+      "sourceRoot": "beatmap",
+      "path": "KANA-BOON - Silhouette (Kagetsu) [Mamayu's Insane].osu",
+      "role": "beatmap",
+      "bytes": 16618
+    },
+    {
+      "sourceRoot": "beatmap",
+      "path": "KANA-BOON - Silhouette (Kagetsu) [Normal].osu",
+      "role": "beatmap",
+      "bytes": 9363
+    },
+    {
+      "sourceRoot": "beatmap",
+      "path": "KANA-BOON - Silhouette (Kagetsu) [pkhg's Insane].osu",
+      "role": "beatmap",
+      "bytes": 15133
+    },
+    {
+      "sourceRoot": "beatmap",
+      "path": "KANA-BOON - Silhouette (Kagetsu) [Rocket's Hard].osu",
+      "role": "beatmap",
+      "bytes": 14092
+    },
+    {
+      "sourceRoot": "beatmap",
+      "path": "KANA-BOON - Silhouette (Kagetsu) [Yiyo's Insane].osu",
+      "role": "beatmap",
+      "bytes": 16066
+    },
+    {
+      "sourceRoot": "beatmap",
+      "path": "KANA-BOON - Silhouette.mp3",
+      "role": "audio",
+      "bytes": 2126743
+    },
+    {
+      "sourceRoot": "beatmap",
+      "path": "soft-hitclap.wav",
+      "role": "audio",
+      "bytes": 44744
+    },
+    {
+      "sourceRoot": "beatmap",
+      "path": "soft-hitwhistle.wav",
+      "role": "audio",
+      "bytes": 89620
+    },
+    {
+      "sourceRoot": "beatmap",
+      "path": "soft-sliderslide.wav",
+      "role": "audio",
+      "bytes": 44
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "applause.mp3",
+      "role": "audio",
+      "bytes": 7225159
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "approachcircle.png",
+      "role": "image",
+      "bytes": 4504
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "combo-0.png",
+      "role": "image",
+      "bytes": 1051
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "combo-0@2x.png",
+      "role": "image",
+      "bytes": 3414
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "combo-1.png",
+      "role": "image",
+      "bytes": 533
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "combo-1@2x.png",
+      "role": "image",
+      "bytes": 3177
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "combo-2.png",
+      "role": "image",
+      "bytes": 1366
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "combo-2@2x.png",
+      "role": "image",
+      "bytes": 3572
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "combo-3.png",
+      "role": "image",
+      "bytes": 1300
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "combo-3@2x.png",
+      "role": "image",
+      "bytes": 3497
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "combo-4.png",
+      "role": "image",
+      "bytes": 1185
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "combo-4@2x.png",
+      "role": "image",
+      "bytes": 3510
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "combo-5.png",
+      "role": "image",
+      "bytes": 1358
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "combo-5@2x.png",
+      "role": "image",
+      "bytes": 3572
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "combo-6.png",
+      "role": "image",
+      "bytes": 1191
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "combo-6@2x.png",
+      "role": "image",
+      "bytes": 3485
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "combo-7.png",
+      "role": "image",
+      "bytes": 767
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "combo-7@2x.png",
+      "role": "image",
+      "bytes": 3334
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "combo-8.png",
+      "role": "image",
+      "bytes": 1383
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "combo-8@2x.png",
+      "role": "image",
+      "bytes": 3537
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "combo-9.png",
+      "role": "image",
+      "bytes": 1234
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "combo-9@2x.png",
+      "role": "image",
+      "bytes": 3532
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "combo-x.png",
+      "role": "image",
+      "bytes": 1465
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "combo-x@2x.png",
+      "role": "image",
+      "bytes": 5569
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "combobreak.wav",
+      "role": "audio",
+      "bytes": 105412
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "cursor-smoke.png",
+      "role": "image",
+      "bytes": 4163
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "cursor.png",
+      "role": "image",
+      "bytes": 22772
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "cursor@2x.png",
+      "role": "image",
+      "bytes": 54183
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "cursortrail.png",
+      "role": "image",
+      "bytes": 2792
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "default-0.png",
+      "role": "image",
+      "bytes": 1073
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "default-0@2x.png",
+      "role": "image",
+      "bytes": 3152
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "default-1.png",
+      "role": "image",
+      "bytes": 644
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "default-1@2x.png",
+      "role": "image",
+      "bytes": 3067
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "default-2.png",
+      "role": "image",
+      "bytes": 1100
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "default-2@2x.png",
+      "role": "image",
+      "bytes": 3198
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "default-3.png",
+      "role": "image",
+      "bytes": 1062
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "default-3@2x.png",
+      "role": "image",
+      "bytes": 3207
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "default-4.png",
+      "role": "image",
+      "bytes": 1052
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "default-4@2x.png",
+      "role": "image",
+      "bytes": 3189
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "default-5.png",
+      "role": "image",
+      "bytes": 1086
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "default-5@2x.png",
+      "role": "image",
+      "bytes": 3211
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "default-6.png",
+      "role": "image",
+      "bytes": 1061
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "default-6@2x.png",
+      "role": "image",
+      "bytes": 3192
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "default-7.png",
+      "role": "image",
+      "bytes": 808
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "default-7@2x.png",
+      "role": "image",
+      "bytes": 3123
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "default-8.png",
+      "role": "image",
+      "bytes": 1208
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "default-8@2x.png",
+      "role": "image",
+      "bytes": 3211
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "default-9.png",
+      "role": "image",
+      "bytes": 1076
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "default-9@2x.png",
+      "role": "image",
+      "bytes": 3203
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "drum-hitclap.wav",
+      "role": "audio",
+      "bytes": 129656
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "drum-hitfinish.wav",
+      "role": "audio",
+      "bytes": 145508
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "drum-hitnormal.wav",
+      "role": "audio",
+      "bytes": 28064
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "drum-hitwhistle.wav",
+      "role": "audio",
+      "bytes": 141564
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "drum-sliderslide.wav",
+      "role": "audio",
+      "bytes": 0
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "drum-slidertick.wav",
+      "role": "audio",
+      "bytes": 2660
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "drum-sliderwhistle.wav",
+      "role": "audio",
+      "bytes": 44
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "failsound.mp3",
+      "role": "audio",
+      "bytes": 4847807
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "followpoint-0.png",
+      "role": "image",
+      "bytes": 2792
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "followpoint-1.png",
+      "role": "image",
+      "bytes": 3097
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "followpoint-2.png",
+      "role": "image",
+      "bytes": 3097
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "hit0.png",
+      "role": "image",
+      "bytes": 5649
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "hit100.png",
+      "role": "image",
+      "bytes": 5655
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "hit100k.png",
+      "role": "image",
+      "bytes": 5655
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "hit300-0.png",
+      "role": "image",
+      "bytes": 740
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "hit300-1.png",
+      "role": "image",
+      "bytes": 2792
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "hit300.png",
+      "role": "image",
+      "bytes": 6175
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "hit300g-0.png",
+      "role": "image",
+      "bytes": 740
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "hit300g-1.png",
+      "role": "image",
+      "bytes": 2792
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "hit300g.png",
+      "role": "image",
+      "bytes": 6175
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "hit300k-0.png",
+      "role": "image",
+      "bytes": 740
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "hit300k-1.png",
+      "role": "image",
+      "bytes": 2792
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "hit300k.png",
+      "role": "image",
+      "bytes": 6175
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "hit50.png",
+      "role": "image",
+      "bytes": 5469
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "hit50k.png",
+      "role": "image",
+      "bytes": 5469
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "hitcircle.png",
+      "role": "image",
+      "bytes": 5560
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "hitcircle@2x.png",
+      "role": "image",
+      "bytes": 9163
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "hitcircleoverlay.png",
+      "role": "image",
+      "bytes": 14720
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "hitcircleoverlay@2x.png",
+      "role": "image",
+      "bytes": 31610
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "inputoverlay-background.png",
+      "role": "image",
+      "bytes": 4154
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "inputoverlay-background@2x.png",
+      "role": "image",
+      "bytes": 6305
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "inputoverlay-key.png",
+      "role": "image",
+      "bytes": 3544
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "inputoverlay-key@2x.png",
+      "role": "image",
+      "bytes": 4317
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "menuback.wav",
+      "role": "audio",
+      "bytes": 30448
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "menuclick.wav",
+      "role": "audio",
+      "bytes": 144214
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "menuhit.wav",
+      "role": "audio",
+      "bytes": 361038
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "mode-osu-med.png",
+      "role": "image",
+      "bytes": 8581
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "mode-osu-med@2x.png",
+      "role": "image",
+      "bytes": 14864
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "mode-osu-small.png",
+      "role": "image",
+      "bytes": 2925
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "mode-osu-small@2x.png",
+      "role": "image",
+      "bytes": 6204
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "mode-osu.png",
+      "role": "image",
+      "bytes": 28240
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "mode-osu@2x.png",
+      "role": "image",
+      "bytes": 37793
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "normal-hitclap.wav",
+      "role": "audio",
+      "bytes": 18096
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "normal-hitfinish.wav",
+      "role": "audio",
+      "bytes": 24252
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "normal-hitnormal.wav",
+      "role": "audio",
+      "bytes": 25580
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "normal-hitwhistle.wav",
+      "role": "audio",
+      "bytes": 141068
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "normal-sliderslide.wav",
+      "role": "audio",
+      "bytes": 223744
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "normal-slidertick.wav",
+      "role": "audio",
+      "bytes": 94284
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "normal-sliderwhistle.wav",
+      "role": "audio",
+      "bytes": 0
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "pause-back.png",
+      "role": "image",
+      "bytes": 5304
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "pause-continue.png",
+      "role": "image",
+      "bytes": 6282
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "pause-replay.png",
+      "role": "image",
+      "bytes": 7261
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "pause-retry.png",
+      "role": "image",
+      "bytes": 6295
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "ranking-A.png",
+      "role": "image",
+      "bytes": 32249
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "Ranking-A@2x.png",
+      "role": "image",
+      "bytes": 29424
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "ranking-accuracy.png",
+      "role": "image",
+      "bytes": 176
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "ranking-accuracy@2x.png",
+      "role": "image",
+      "bytes": 3001
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "ranking-B.png",
+      "role": "image",
+      "bytes": 34819
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "Ranking-B@2x.png",
+      "role": "image",
+      "bytes": 35789
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "ranking-C.png",
+      "role": "image",
+      "bytes": 26350
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "Ranking-C@2x.png",
+      "role": "image",
+      "bytes": 29103
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "ranking-D.png",
+      "role": "image",
+      "bytes": 28303
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "Ranking-D@2x.png",
+      "role": "image",
+      "bytes": 25199
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "ranking-graph.png",
+      "role": "image",
+      "bytes": 15747
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "ranking-graph@2x.png",
+      "role": "image",
+      "bytes": 44193
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "ranking-maxcombo.png",
+      "role": "image",
+      "bytes": 176
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "ranking-maxcombo@2x.png",
+      "role": "image",
+      "bytes": 3001
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "ranking-panel.png",
+      "role": "image",
+      "bytes": 8857
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "ranking-panel@2x.png",
+      "role": "image",
+      "bytes": 17493
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "ranking-perfect.png",
+      "role": "image",
+      "bytes": 3789
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "ranking-S.png",
+      "role": "image",
+      "bytes": 27058
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "Ranking-S@2x.png",
+      "role": "image",
+      "bytes": 32768
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "Ranking-title.png",
+      "role": "image",
+      "bytes": 3141
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "ranking-X.png",
+      "role": "image",
+      "bytes": 27290
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "Ranking-X@2x.png",
+      "role": "image",
+      "bytes": 62076
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "ready.mp3",
+      "role": "audio",
+      "bytes": 105642
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "reversearrow.png",
+      "role": "image",
+      "bytes": 6211
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "reversearrow@2x.png",
+      "role": "image",
+      "bytes": 10191
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "score-0.png",
+      "role": "image",
+      "bytes": 1509
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "score-0@2x.png",
+      "role": "image",
+      "bytes": 3966
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "score-1.png",
+      "role": "image",
+      "bytes": 820
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "score-1@2x.png",
+      "role": "image",
+      "bytes": 3379
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "score-2.png",
+      "role": "image",
+      "bytes": 1506
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "score-2@2x.png",
+      "role": "image",
+      "bytes": 3977
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "score-3.png",
+      "role": "image",
+      "bytes": 1423
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "score-3@2x.png",
+      "role": "image",
+      "bytes": 3890
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "score-4.png",
+      "role": "image",
+      "bytes": 1414
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "score-4@2x.png",
+      "role": "image",
+      "bytes": 4015
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "score-5.png",
+      "role": "image",
+      "bytes": 1491
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "score-5@2x.png",
+      "role": "image",
+      "bytes": 3991
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "score-6.png",
+      "role": "image",
+      "bytes": 1505
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "score-6@2x.png",
+      "role": "image",
+      "bytes": 3937
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "score-7.png",
+      "role": "image",
+      "bytes": 1033
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "score-7@2x.png",
+      "role": "image",
+      "bytes": 3649
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "score-8.png",
+      "role": "image",
+      "bytes": 1700
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "score-8@2x.png",
+      "role": "image",
+      "bytes": 4097
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "score-9.png",
+      "role": "image",
+      "bytes": 1470
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "score-9@2x.png",
+      "role": "image",
+      "bytes": 4003
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "score-comma.png",
+      "role": "image",
+      "bytes": 2965
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "score-comma@2x.png",
+      "role": "image",
+      "bytes": 3073
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "score-dot.png",
+      "role": "image",
+      "bytes": 2965
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "score-dot@2x.png",
+      "role": "image",
+      "bytes": 3073
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "score-percent.png",
+      "role": "image",
+      "bytes": 2052
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "score-percent@2x.png",
+      "role": "image",
+      "bytes": 5028
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "score-x.png",
+      "role": "image",
+      "bytes": 1665
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "score-x@2x.png",
+      "role": "image",
+      "bytes": 5209
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "scorebar-bg.png",
+      "role": "image",
+      "bytes": 2987
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "scorebar-bg@2x.png",
+      "role": "image",
+      "bytes": 68
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "scorebar-colour.png",
+      "role": "image",
+      "bytes": 2864
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "scorebar-colour@2x.png",
+      "role": "image",
+      "bytes": 2904
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "section-fail.png",
+      "role": "image",
+      "bytes": 37943
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "section-fail@2x.png",
+      "role": "image",
+      "bytes": 86237
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "section-pass.png",
+      "role": "image",
+      "bytes": 40848
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "section-pass@2x.png",
+      "role": "image",
+      "bytes": 92701
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "sectionfail.wav",
+      "role": "audio",
+      "bytes": 313040
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "sectionpass.wav",
+      "role": "audio",
+      "bytes": 208480
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "selection-tab.png",
+      "role": "image",
+      "bytes": 3211
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "selection-tab@2x.png",
+      "role": "image",
+      "bytes": 3418
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "Skin.ini",
+      "role": "skin-config",
+      "bytes": 4010
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "sliderb0.png",
+      "role": "image",
+      "bytes": 10899
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "sliderb0@2x.png",
+      "role": "image",
+      "bytes": 23267
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "sliderendcircle.png",
+      "role": "image",
+      "bytes": 2792
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "sliderfollowcircle.png",
+      "role": "image",
+      "bytes": 25882
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "sliderfollowcircle@2x.png",
+      "role": "image",
+      "bytes": 62302
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "sliderscorepoint.png",
+      "role": "image",
+      "bytes": 3386
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "soft-hitclap.wav",
+      "role": "audio",
+      "bytes": 4436
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "soft-hitfinish.wav",
+      "role": "audio",
+      "bytes": 145508
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "soft-hitnormal.wav",
+      "role": "audio",
+      "bytes": 25580
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "soft-hitwhistle.wav",
+      "role": "audio",
+      "bytes": 141064
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "soft-sliderslide.wav",
+      "role": "audio",
+      "bytes": 103760
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "soft-slidertick.wav",
+      "role": "audio",
+      "bytes": 117804
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "soft-sliderwhistle.wav",
+      "role": "audio",
+      "bytes": 67256
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "songselect-bottom.png",
+      "role": "image",
+      "bytes": 3104
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "songselect-bottom@2x.png",
+      "role": "image",
+      "bytes": 3598
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "spinner-approachcircle.png",
+      "role": "image",
+      "bytes": 45054
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "spinner-background.png",
+      "role": "image",
+      "bytes": 5456
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "spinner-bottom.png",
+      "role": "image",
+      "bytes": 5456
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "spinner-circle.png",
+      "role": "image",
+      "bytes": 15239
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "spinner-circle@2x.png",
+      "role": "image",
+      "bytes": 31474
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "spinner-clear.png",
+      "role": "image",
+      "bytes": 5226
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "spinner-glow.png",
+      "role": "image",
+      "bytes": 6797
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "spinner-middle.png",
+      "role": "image",
+      "bytes": 141
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "spinner-middle2.png",
+      "role": "image",
+      "bytes": 141
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "spinner-middle2@2x.png",
+      "role": "image",
+      "bytes": 141
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "spinner-osu.png",
+      "role": "image",
+      "bytes": 2792
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "spinner-rpm.png",
+      "role": "image",
+      "bytes": 4488
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "spinner-spin.png",
+      "role": "image",
+      "bytes": 2792
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "spinner-top.png",
+      "role": "image",
+      "bytes": 141
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "spinner-warning.png",
+      "role": "image",
+      "bytes": 18558
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "spinner-warning@2x.png",
+      "role": "image",
+      "bytes": 40490
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "spinnerbonus.wav",
+      "role": "audio",
+      "bytes": 178600
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "spinnerspin.wav",
+      "role": "audio",
+      "bytes": 44
+    },
+    {
+      "sourceRoot": "skin",
+      "path": "whoosh.wav",
+      "role": "audio",
+      "bytes": 44546
+    }
+  ]
+}

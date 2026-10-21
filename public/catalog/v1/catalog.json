@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "defaultSkinId": "yugen-v3",
+  "skins": [
+    {
+      "id": "yugen-v3",
+      "root": "skins/v3/yugen/",
+      "manifest": "manifest.json",
+      "config": "Skin.ini"
+    }
+  ],
+  "songs": [
+    {
+      "id": "silhouette-399358",
+      "title": "Silhouette",
+      "artist": "KANA-BOON",
+      "creator": "Kagetsu",
+      "beatmapSetId": 399358,
+      "root": "content/v2/silhouette/",
+      "manifest": "manifest.json",
+      "audio": "KANA-BOON - Silhouette.mp3",
+      "background": "BG12.jpg",
+      "previewTimeMs": 44757,
+      "difficulties": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "beatmapId": 892534,
+          "file": "KANA-BOON - Silhouette (Kagetsu) [Easy].osu"
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "beatmapId": 906953,
+          "file": "KANA-BOON - Silhouette (Kagetsu) [Normal].osu"
+        },
+        {
+          "id": "rockets-hard",
+          "label": "Rocket's Hard",
+          "beatmapId": 871446,
+          "file": "KANA-BOON - Silhouette (Kagetsu) [Rocket's Hard].osu"
+        },
+        {
+          "id": "pkhgs-insane",
+          "label": "pkhg's Insane",
+          "beatmapId": 896855,
+          "file": "KANA-BOON - Silhouette (Kagetsu) [pkhg's Insane].osu"
+        },
+        {
+          "id": "mamayus-insane",
+          "label": "Mamayu's Insane",
+          "beatmapId": 885030,
+          "file": "KANA-BOON - Silhouette (Kagetsu) [Mamayu's Insane].osu"
+        },
+        {
+          "id": "yiyos-insane",
+          "label": "Yiyo's Insane",
+          "beatmapId": 877335,
+          "file": "KANA-BOON - Silhouette (Kagetsu) [Yiyo's Insane].osu"
+        },
+        {
+          "id": "kage",
+          "label": "Kage",
+          "beatmapId": 869197,
+          "file": "KANA-BOON - Silhouette (Kagetsu) [Kage].osu"
+        }
+      ]
+    }
+  ]
+}

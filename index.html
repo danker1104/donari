@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="osu!standard 방식의 독립 웹 리듬게임" />
+    <meta name="theme-color" content="#05060b" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%23ff4057'/%3E%3Ccircle cx='32' cy='32' r='14' fill='none' stroke='white' stroke-width='5'/%3E%3C/svg%3E" />
+    <title>Silhouette Rhythm Game</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#menu-panel">곡 선택으로 건너뛰기</a>
+    <main class="app-shell" aria-labelledby="app-title">
+      <canvas id="gameplay" width="1024" height="768" aria-label="게임 플레이 화면"></canvas>
+      <div class="selection-atmosphere" aria-hidden="true">
+        <div class="selection-atmosphere__beam"></div>
+        <img id="selection-mode-artwork" width="256" height="256" alt="">
+      </div>
+      <section id="menu-panel" class="menu-panel" tabindex="-1" aria-describedby="stage-status">
+        <header class="selection-header">
+          <button id="leaderboard-button" class="leaderboard-button" type="button" aria-haspopup="dialog" aria-controls="leaderboard-dialog" title="난이도별 랭킹" disabled>랭킹</button>
+          <img id="mode-artwork" class="mode-artwork" width="128" height="128" alt="" aria-hidden="true">
+        </header>
+        <article class="song-card" aria-labelledby="app-title">
+          <div class="song-card-art" aria-hidden="true"><img id="song-card-artwork" width="128" height="128" alt=""></div>
+          <div class="song-card-copy">
+            <p class="song-source">KANA-BOON</p>
+            <h1 id="app-title" translate="no">Silhouette</h1>
+            <p id="song-credit" class="song-credit">KANA-BOON · beatmap by Kagetsu</p>
+          </div>
+        </article>
+        <div id="difficulty-region" class="difficulty-region">
+          <div id="difficulty-rail" class="difficulty-rail" role="listbox" aria-label="난이도 캐러셀"></div>
+        </div>
+        <label class="visually-hidden" for="difficulty-select">난이도</label>
+        <select id="difficulty-select" name="difficulty" autocomplete="off" class="visually-hidden" aria-label="난이도 선택"></select>
+        <section class="selection-detail" aria-label="선택한 난이도 정보">
+          <div class="selection-detail-heading"><span>BEATMAP DATA</span><strong id="selected-difficulty-name">INSANE</strong></div>
+          <p id="stage-status" aria-live="polite">카탈로그를 준비하고 있습니다.</p>
+          <dl id="difficulty-stats" class="difficulty-stats" aria-live="polite"></dl>
+          <div class="play-actions">
+            <button id="preview-button" class="preview-button" type="button" disabled>미리듣기</button>
+            <button id="start-button" type="button" disabled>콘텐츠 준비 중</button>
+          </div>
+        </section>
+      </section>
+      <dialog id="flow-dialog" aria-labelledby="dialog-title">
+        <img id="dialog-panel-artwork" class="dialog-panel-artwork" width="1280" height="720" alt="" aria-hidden="true">
+        <img id="dialog-artwork" class="dialog-artwork" width="320" height="240" alt="" aria-hidden="true">
+        <img id="dialog-section-artwork" class="dialog-section-artwork" width="512" height="128" alt="" aria-hidden="true">
+        <h2 id="dialog-title">일시정지</h2>
+        <div id="dialog-content"></div>
+        <div class="dialog-actions"><button id="resume-button" type="button">계속하기</button><button id="restart-button" type="button">처음부터</button><button id="select-button" type="button">난이도 선택</button></div>
+      </dialog>
+      <dialog id="leaderboard-dialog" class="leaderboard-dialog" aria-labelledby="leaderboard-title" aria-describedby="leaderboard-song">
+        <header class="leaderboard-header">
+          <div><p id="leaderboard-song" class="leaderboard-song"></p><h2 id="leaderboard-title">랭킹보드 <span class="leaderboard-scope">온라인</span></h2></div>
+          <button id="leaderboard-close" class="icon-button" type="button" aria-label="랭킹 닫기" title="닫기"></button>
+        </header>
+        <div class="leaderboard-filter"><label for="leaderboard-difficulty">난이도</label><select id="leaderboard-difficulty"></select></div>
+        <div id="leaderboard-records" class="leaderboard-scroll" aria-live="polite"></div>
+      </dialog>
+      <pre id="debug-hud" class="debug-hud" hidden aria-label="성능 계측"></pre>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "name": "silhouette-web-rhythm-game",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "dev": "vite",
+    "build": "npm run build:bundle && npm run validate:dist",
+    "build:bundle": "vite build",
+    "preview": "vite preview",
+    "validate:dist": "node scripts/validate-dist.mjs"
+  },
+  "dependencies": {
+    "lucide": "^1.59.0",
+    "osu-classes": "3.1.0",
+    "osu-parsers": "4.1.7",
+    "osu-standard-stable": "5.0.1"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.10",
+    "@eslint/js": "9.34.0",
+    "eslint": "9.34.0",
+    "typescript": "5.9.2",
+    "vite": "7.3.5",
+    "vitest": "3.2.6"
+  }
+}
