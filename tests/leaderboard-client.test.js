@@ -36,3 +36,13 @@ test('database failures and invalid responses reject instead of displaying saved
   const network = client(async () => { throw new Error('offline'); });
   await assert.rejects(network.repo.getLeaderboard('key'), /연결하지/);
 });
+
+test('personal best comes from this browser and stays isolated by difficulty and ruleset', () => {
+  const values = new Map();
+  const local = new LocalRepository({ getItem: (key) => values.get(key) ?? null, setItem: (key, value) => values.set(key, value) });
+  const repo = new OnlineLeaderboardRepository(local, () => { throw new Error('personal best must not depend on online nickname'); });
+  local.saveBestResult('song:1:6', { id: 'mine', score: 1234 });
+  assert.equal(repo.getBestResult('song:1:6').id, 'mine');
+  assert.equal(repo.getBestResult('song:2:6'), null);
+  assert.equal(repo.getBestResult('song:1:5'), null);
+});

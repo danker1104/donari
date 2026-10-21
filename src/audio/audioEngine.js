@@ -30,6 +30,7 @@ export class AudioEngine {
     this.musicBuffer = null;
     /** @type {Map<string, Promise<any>>} */
     this.decodedCache = new Map();
+    this.streamCache = new Map();
     this.generation = 0;
     this.interruptionReported = false;
     this.musicVolume = 1;
@@ -103,6 +104,47 @@ export class AudioEngine {
     } catch (error) {
       if (entry.decodePolicy === 'optional') return { kind: 'silent' };
       throw error;
+    }
+  }
+
+  /** Long scene music uses native buffering instead of decoding the entire file before play.
+   * @param {string} url @param {()=>HTMLAudioElement} [createMedia]
+   */
+  prepareStream(url, createMedia = () => new Audio()) {
+    if (this.streamCache.has(url)) return true;
+    try {
+      this.assertReady();
+      const media = createMedia();
+      media.preload = 'auto';
+      media.src = url;
+      const source = this.context.createMediaElementSource(media);
+      source.connect(this.effectGain);
+      media.load();
+      this.streamCache.set(url, media);
+      return true;
+    } catch { return false; }
+  }
+
+  /** @param {string} url */
+  async playStream(url) {
+    this.assertReady();
+    if (!this.prepareStream(url)) return false;
+    const media = this.streamCache.get(url);
+    const release = () => {
+      if (this.effectSources.get(media) !== release) return;
+      this.effectSources.delete(media);
+      media.pause();
+      media.currentTime = 0;
+    };
+    this.effectSources.set(media, release);
+    media.onended = release;
+    try {
+      await media.play();
+      return this.effectSources.get(media) === release;
+    } catch {
+      const active = this.effectSources.get(media) === release;
+      release();
+      return active ? false : null;
     }
   }
 

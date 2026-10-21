@@ -12,6 +12,9 @@ export class OnlineLeaderboardRepository {
   loadNickname() { return this.local.loadNickname(); }
 
   /** @param {string} key */
+  getBestResult(key) { return this.local.getBestResult(key); }
+
+  /** @param {string} key */
   async getLeaderboard(key) {
     const data = await this.request(`/api/leaderboard?boardKey=${encodeURIComponent(key)}`);
     return data.entries;

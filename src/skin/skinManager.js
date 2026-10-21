@@ -81,6 +81,7 @@ export class SkinManager {
 
   /** @param {string} name @param {string} url */
   async loadImage(name, url) {
+    if (this.images.has(name)) return this.images.get(name);
     const response = await this.fetcher(url);
     if (!response.ok) return null;
     const blob = await response.blob();

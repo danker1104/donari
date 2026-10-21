@@ -54,7 +54,11 @@ export class CircleSliceApp {
     let storage;
     try { storage = window.localStorage; } catch { storage = { getItem: () => null, setItem: () => { throw new Error('STORAGE_UNAVAILABLE'); } }; }
     this.repository = new LocalRepository(storage);
-    this.leaderboard = new LeaderboardPresentation(new OnlineLeaderboardRepository(this.repository), RULESET_VERSION);
+    this.leaderboard = new LeaderboardPresentation(new OnlineLeaderboardRepository(this.repository), RULESET_VERSION, (id) => {
+      if (['PAUSED', 'FAILED', 'RESULT'].includes(this.scene.current)) this.returnToSelection();
+      this.selectDifficulty(id);
+      void this.start();
+    });
     this.settings = this.repository.loadSettings();
     this.difficultyModels = new Map();
     this.lastWheelDirection = 0;
@@ -118,7 +122,7 @@ export class CircleSliceApp {
     this.elements.startButton.onclick = () => { void this.start(); };
     const previewButton = /** @type {HTMLButtonElement|null} */ (document.getElementById('preview-button'));
     if (previewButton) previewButton.disabled = false;
-    this.setStatus('Circle, Slider, Spinner를 지원하는 Standard 개발 플레이입니다.');
+    this.setStatus('마우스로 조준하고 Z / X 또는 마우스 버튼으로 노트를 누르세요.');
   }
 
   async start() {
@@ -134,7 +138,8 @@ export class CircleSliceApp {
       if (!this.loading.isCurrent(load.id)) throw new globalThis.DOMException('Stale content load', 'AbortError');
     };
     this.elements.startButton.disabled = true;
-    this.setStatus('오디오 권한을 확인하고 실제 콘텐츠를 로딩 중…');
+    this.setStatus('플레이 정보를 준비하는 중…');
+    this.elements.startButton.textContent = '플레이 정보 준비 중…';
     try {
       await this.audio.unlockFromGesture();
       const difficulty = this.song.difficulties.find((/** @type {any} */ entry) => entry.id === this.elements.select.value) ?? this.song.difficulties[0];
@@ -165,6 +170,8 @@ export class CircleSliceApp {
       } else if (storyboardResponse) console.warn(`STORYBOARD_FETCH_SKIPPED: ${storyboardResponse.status}`);
       const audioEntry = contentManifest.files.find((/** @type {any} */ entry) => entry.path === this.song.audio);
       if (!audioEntry) throw new Error('AUDIO_MANIFEST_ENTRY_MISSING');
+      this.setStatus('곡 음악을 준비하는 중…');
+      this.elements.startButton.textContent = '곡 음악 준비 중…';
       const audioHandle = await this.audio.loadAudio(
         resolvePublicAsset(this.baseUrl, this.song.root, this.song.audio),
         audioEntry,
@@ -172,7 +179,9 @@ export class CircleSliceApp {
       assertCurrent();
       if (audioHandle.kind !== 'buffer') throw new Error('AUDIO_REQUIRED_SILENT');
 
-      const skin = new SkinManager(this.fetcher);
+      this.setStatus('타격음과 게임 화면을 준비하는 중…');
+      this.elements.startButton.textContent = '게임 리소스 준비 중…';
+      const skin = this.loadedSession?.skin ?? new SkinManager(this.fetcher);
       const skinConfig = skin.configure(await skinConfigResponse.text());
       const skinPlan = buildStandardSkinPlan(skinManifest, skinConfig, { highResolution: window.devicePixelRatio > 1 });
       skin.configureRoles(skinPlan.roles);
@@ -200,13 +209,17 @@ export class CircleSliceApp {
       assertCurrent();
 
       const leadInOffsetMs = -startLeadInDelayMs(beatmap.statistics.firstStartTimeMs);
-      this.loadedSession = { beatmap, audioBuffer: audioHandle.buffer, skin, skinPlan, effects, storyboard, storyboardResources, leadInOffsetMs };
+      const completionSounds = new Map(skinManifest.files
+        .filter((entry) => ['applause.mp3', 'failsound.mp3', 'failsound.wav'].includes(entry.path))
+        .map((entry) => [entry.path, resolvePublicAsset(this.baseUrl, this.skinCatalogEntry.root, entry.path)]));
+      this.loadedSession = { beatmap, audioBuffer: audioHandle.buffer, skin, skinPlan, effects, storyboard, storyboardResources, leadInOffsetMs, completionSounds };
       this.transitionTo('READY');
       this.beginGameplay(beatmap, audioHandle.buffer, skin, effects, storyboard, storyboardResources, leadInOffsetMs);
     } catch (error) {
       if (!this.loading.isCurrent(load.id)) return;
       this.transitionTo('DIFFICULTY_SELECT');
       this.elements.startButton.disabled = false;
+      this.elements.startButton.textContent = 'Standard 플레이 시작';
       this.setStatus(`시작 실패: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
@@ -272,7 +285,7 @@ export class CircleSliceApp {
   updateDifficultyStats() {
     const model = this.difficultyModels.get(this.elements.select.value);
     if (!model) { this.elements.stats.textContent = ''; return; }
-    const values = [['HP', model.hpDrainRate], ['CS', model.circleSize], ['OD', model.overallDifficulty], ['AR', model.approachRate], ['Circle', model.statistics.circles], ['Slider', model.statistics.sliders], ['Spinner', model.statistics.spinners], ['Total', model.statistics.total]];
+    const values = [['HP', model.hpDrainRate], ['CS', model.circleSize], ['OD', model.overallDifficulty], ['AR', model.approachRate], ['단타', model.statistics.circles], ['슬라이더', model.statistics.sliders], ['스피너', model.statistics.spinners], ['전체', model.statistics.total]];
     this.elements.stats.replaceChildren(...values.map(([label, value]) => {
       const wrapper = document.createElement('div'); const term = document.createElement('dt'); const detail = document.createElement('dd');
       term.textContent = String(label); detail.textContent = String(value); wrapper.append(term, detail); return wrapper;
@@ -307,7 +320,7 @@ export class CircleSliceApp {
       const title = document.createElement('strong'); title.textContent = item.label;
       const id = document.createElement('small'); id.textContent = `Beatmap ${item.beatmapId}`;
       const stats = document.createElement('span');
-      stats.textContent = item.ready ? `AR ${item.ar} · OD ${item.od} · ${item.total} objects` : '불러오는 중…';
+      stats.textContent = item.ready ? `AR ${item.ar} · OD ${item.od} · 노트 ${item.total}개` : '불러오는 중…';
       button.replaceChildren(title, id, stats);
       rail.append(button);
       existing.delete(item.id);
@@ -401,7 +414,8 @@ export class CircleSliceApp {
     const skin = new Map();
     /** @param {any} manifest @param {string} root @param {Map<string,any>} target @param {boolean} [excludeMusic] */
     const loadScope = async (manifest, root, target, excludeMusic = false) => Promise.all(
-      manifest.files.filter((/** @type {any} */ entry) => entry.role === 'audio' && (!excludeMusic || entry.path !== this.song.audio)).map(async (/** @type {any} */ entry) => {
+      manifest.files.filter((/** @type {any} */ entry) => entry.role === 'audio' && (!excludeMusic || entry.path !== this.song.audio)
+        && (excludeMusic || !['ready.mp3', 'applause.mp3', 'failsound.mp3', 'failsound.wav'].includes(entry.path))).map(async (/** @type {any} */ entry) => {
         const handle = await this.audio.loadAudio(resolvePublicAsset(this.baseUrl, root, entry.path), entry);
         target.set(entry.path, handle);
       }),
@@ -602,10 +616,13 @@ export class CircleSliceApp {
     };
     this.session = { input, renderer, gameplay, beatmap, tick, canvas, windowObject: window, documentObject: document, frameMetrics, diagnostics, resetFrameTime: () => { lastRafTime = null; frames.reset(); }, stopLoopSounds: () => { sliderSounds.stop(); spinnerSounds.stop(); }, cleanup: () => { sliderSounds.stop(); spinnerSounds.stop(); window.removeEventListener('resize', resize); } };
     this.audio.playMusic(audioBuffer, startOffsetMs);
-    const readySound = effects.resolve('ready.mp3');
-    if (readySound?.kind === 'buffer') this.audio.playEffect(readySound.buffer, 'effect');
     this.setStatus(`${beatmap.difficultyName} · Circle ${beatmap.statistics.circles} / Slider ${beatmap.statistics.sliders} / Spinner ${beatmap.statistics.spinners}`);
     this.rafId = requestAnimationFrame(tick);
+    // Native media buffers incrementally; no large decodeAudioData job during gameplay.
+    for (const name of ['failsound.wav', 'failsound.mp3', 'applause.mp3']) {
+      const url = this.loadedSession?.completionSounds.get(name);
+      if (url) this.audio.prepareStream(url);
+    }
   }
 
   /** @param {string} reason @param {boolean} [audioAlreadyPaused] */
@@ -684,7 +701,15 @@ export class CircleSliceApp {
     const completion = completionSoundCandidates(cleared)
       .map((name) => this.loadedSession?.effects.resolve(name))
       .find((handle) => handle !== null && handle !== undefined);
-    if (completion?.kind === 'buffer') this.audio.playEffect(completion.buffer, 'effect');
+    const completionUrl = completionSoundCandidates(cleared)
+      .map((name) => this.loadedSession?.completionSounds.get(name)).find(Boolean);
+    if (completionUrl) {
+      const session = this.session;
+      void this.audio.playStream(completionUrl).then((played) => {
+        if (played === false && this.session === session && ['RESULT', 'FAILED'].includes(this.scene.current)
+          && completion?.kind === 'buffer' && this.audio.context?.state === 'running') this.audio.playEffect(completion.buffer, 'effect');
+      });
+    } else if (completion?.kind === 'buffer') this.audio.playEffect(completion.buffer, 'effect');
     const result = {
       id: globalThis.crypto.randomUUID(),
       songId: this.song.id, beatmapId: this.session.beatmap.beatmapId, rulesetVersion: RULESET_VERSION,
@@ -732,6 +757,7 @@ export class CircleSliceApp {
     document.body.classList.remove('is-playing', 'is-gameflow');
     this.elements.dialog.close();
     this.elements.startButton.disabled = false;
+    this.elements.startButton.textContent = 'Standard 플레이 시작';
     this.updatePreviewButton();
     this.renderDifficultyRail();
     this.setStatus('난이도를 선택하고 플레이를 시작하세요.');

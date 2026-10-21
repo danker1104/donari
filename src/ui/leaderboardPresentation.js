@@ -12,10 +12,11 @@ function element(tag, text = '', className = '') {
 }
 
 export class LeaderboardPresentation {
-  /** @param {import('../storage/leaderboardRepository.js').OnlineLeaderboardRepository} repository @param {number} rulesetVersion */
-  constructor(repository, rulesetVersion) {
+  /** @param {import('../storage/leaderboardRepository.js').OnlineLeaderboardRepository} repository @param {number} rulesetVersion @param {((id:string)=>void)|null} [onPlay] */
+  constructor(repository, rulesetVersion, onPlay = null) {
     this.repository = repository;
     this.rulesetVersion = rulesetVersion;
+    this.onPlay = onPlay;
     this.dialog = /** @type {HTMLDialogElement} */ (document.getElementById('leaderboard-dialog'));
     this.select = /** @type {HTMLSelectElement} */ (document.getElementById('leaderboard-difficulty'));
     this.host = /** @type {HTMLElement} */ (document.getElementById('leaderboard-records'));
@@ -73,7 +74,8 @@ export class LeaderboardPresentation {
   async renderBoard(host, difficulty, highlightId = null) {
     const generation = (this.requests.get(host) ?? 0) + 1;
     this.requests.set(host, generation);
-    host.replaceChildren(element('p', '랭킹을 불러오는 중…', 'leaderboard-message'));
+    host.setAttribute('aria-busy', 'true');
+    host.replaceChildren(this.createPersonalBest(difficulty), element('p', '랭킹을 불러오는 중…', 'leaderboard-message'));
     try {
       const entries = await this.repository.getLeaderboard(this.key(difficulty));
       if (this.requests.get(host) !== generation) return;
@@ -88,8 +90,34 @@ export class LeaderboardPresentation {
       retry.append(createElement(RotateCw, { 'aria-hidden': 'true' }), document.createTextNode('다시 시도'));
       retry.addEventListener('click', () => { void this.renderBoard(host, difficulty, highlightId); });
       message.append(element('p', error instanceof Error ? error.message : '랭킹을 불러오지 못했습니다.'), retry);
-      host.replaceChildren(message);
+      host.replaceChildren(this.createPersonalBest(difficulty), message);
+    } finally {
+      if (this.requests.get(host) === generation) host.setAttribute('aria-busy', 'false');
     }
+  }
+
+  /** @param {any} difficulty */
+  createPersonalBest(difficulty) {
+    const section = element('section', '', 'personal-best');
+    section.setAttribute('aria-label', '이 브라우저의 최고 기록');
+    const heading = element('div', '', 'personal-best-heading');
+    heading.append(element('strong', difficulty.label), element('span', '내 최고 기록 · 이 브라우저'));
+    section.append(heading);
+    const best = this.repository.getBestResult(this.key(difficulty));
+    if (!best || !Number.isFinite(best.score)) {
+      section.append(element('p', '아직 이 브라우저에 저장된 플레이 기록이 없습니다.', 'personal-best-note'));
+      return section;
+    }
+    const stats = element('dl', '', 'personal-best-stats');
+    const values = [['점수', new Intl.NumberFormat('ko-KR').format(best.score)],
+      ['등급', best.cleared ? best.rank : '미클리어'], ['정확도', `${(best.accuracy * 100).toFixed(2)}%`], ['최대 콤보', `${best.maxCombo}x`]];
+    for (const [label, value] of values) {
+      const item = element('div');
+      item.append(element('dt', label), element('dd', value));
+      stats.append(item);
+    }
+    section.append(stats);
+    return section;
   }
 
   /** @param {HTMLElement} host @param {any} difficulty @param {Array<any>} entries @param {string|null} [highlightId] */
@@ -107,8 +135,9 @@ export class LeaderboardPresentation {
     const body = table.createTBody();
     entries.forEach((entry, index) => {
       const row = body.insertRow();
-      if (entry.id === highlightId) { row.className = 'is-current-record'; row.setAttribute('aria-current', 'true'); }
-      row.insertCell().append(element('span', String(index + 1), index < 3 ? 'ranking-place is-podium' : 'ranking-place'));
+      if (index < 3) row.classList.add('is-podium-row', `podium-${index + 1}`);
+      if (entry.id === highlightId) { row.classList.add('is-current-record'); row.setAttribute('aria-current', 'true'); }
+      row.insertCell().append(element('span', String(index + 1), index < 3 ? `ranking-place is-podium place-${index + 1}` : 'ranking-place'));
       row.insertCell().append(element('span', entry.nickname, 'ranking-nickname'));
       row.insertCell().append(element('span', entry.rank, `ranking-grade grade-${entry.rank}`));
       row.insertCell().textContent = new Intl.NumberFormat('ko-KR').format(entry.score);
@@ -117,9 +146,20 @@ export class LeaderboardPresentation {
       const cell = body.insertRow().insertCell();
       cell.colSpan = 4;
       cell.className = 'leaderboard-empty';
-      cell.textContent = '아직 등록된 기록이 없습니다.';
+      cell.append(element('strong', '첫 기록에 도전해 보세요.'), element('p', '아직 등록된 기록이 없습니다.'));
+      if (this.onPlay) {
+        const play = element('button', '이 난이도 플레이', 'leaderboard-play');
+        play.setAttribute('type', 'button');
+        play.addEventListener('click', () => {
+          this.dialog.close();
+          this.onPlay?.(difficulty.id);
+        });
+        cell.append(play);
+      }
     }
-    host.replaceChildren(table);
+    const scroll = element('div', '', 'leaderboard-table-scroll');
+    scroll.append(table);
+    host.replaceChildren(this.createPersonalBest(difficulty), scroll);
   }
 
   /** @param {any} result @param {boolean} eligible */
