@@ -216,7 +216,7 @@ dialog[data-scene="RESULT"] .result-score strong { margin-top:.25rem; font-size:
 .leaderboard-table th:first-child { width:3.75rem; }
 .leaderboard-table th:nth-child(3) { width:4rem; }
 .leaderboard-table th:last-child { width:8rem; text-align:right; }
-.leaderboard-table td:last-child { text-align:right; white-space:nowrap; }
+.leaderboard-table td:last-child:not([colspan]) { text-align:right; white-space:nowrap; }
 .ranking-nickname { display:block; overflow-wrap:anywhere; }
 .ranking-place { color:#98a6b9; }
 .ranking-place.is-podium { color:#f6d779; font-weight:800; }
