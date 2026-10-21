@@ -1,6 +1,6 @@
 // @ts-check
 
-import { StandardRuleset } from 'osu-standard-stable';
+import { SliderHead, SliderRepeat, SliderTail, SliderTick, StandardRuleset } from 'osu-standard-stable';
 
 const standardRuleset = new StandardRuleset();
 
@@ -34,14 +34,19 @@ export function verifyStandardBeatmap(parsedBeatmap) {
             x: Number(start.x + point.x),
             y: Number(start.y + point.y),
           })),
-          nestedParts: object.nestedHitObjects.map((/** @type {any} */ part, /** @type {number} */ index) => ({
-            id: `${part.constructor.name}-${index}`,
-            kind: part.constructor.name === 'SliderHead' ? 'head'
-              : part.constructor.name === 'SliderTick' ? 'tick'
-                : part.constructor.name === 'SliderRepeat' ? 'repeat' : 'tail',
-            timeMs: Number(part.startTime),
-            position: { x: Number(part.stackedStartPosition.x), y: Number(part.stackedStartPosition.y) },
-          })),
+          nestedParts: object.nestedHitObjects.map((/** @type {any} */ part, /** @type {number} */ index) => {
+            const kind = part instanceof SliderHead ? 'head'
+              : part instanceof SliderTick ? 'tick'
+                : part instanceof SliderRepeat ? 'repeat'
+                  : part instanceof SliderTail ? 'tail' : null;
+            if (!kind) throw new Error('BEATMAP_SLIDER_PART_UNSUPPORTED');
+            return {
+              id: `${kind}-${index}`,
+              kind,
+              timeMs: Number(part.startTime),
+              position: { x: Number(part.stackedStartPosition.x), y: Number(part.stackedStartPosition.y) },
+            };
+          }),
         };
       }
       if ('spinsRequired' in object) {
