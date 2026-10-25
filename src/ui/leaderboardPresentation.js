@@ -25,6 +25,7 @@ export class LeaderboardPresentation {
     this.resultDifficulty = null;
     this.highlightId = null;
     this.requests = new WeakMap();
+    this.resultRecords = new WeakMap();
     document.getElementById('leaderboard-button')?.prepend(createElement(Trophy, { 'aria-hidden': 'true' }));
     const close = document.getElementById('leaderboard-close');
     close?.append(createElement(X, { 'aria-hidden': 'true' }));
@@ -75,7 +76,7 @@ export class LeaderboardPresentation {
     const generation = (this.requests.get(host) ?? 0) + 1;
     this.requests.set(host, generation);
     host.setAttribute('aria-busy', 'true');
-    host.replaceChildren(this.createPersonalBest(difficulty), element('p', '랭킹을 불러오는 중…', 'leaderboard-message'));
+    host.replaceChildren(this.createPersonalBest(difficulty, this.resultRecords.get(host)), element('p', '랭킹을 불러오는 중…', 'leaderboard-message'));
     try {
       const entries = await this.repository.getLeaderboard(this.key(difficulty));
       if (this.requests.get(host) !== generation) return;
@@ -90,20 +91,20 @@ export class LeaderboardPresentation {
       retry.append(createElement(RotateCw, { 'aria-hidden': 'true' }), document.createTextNode('다시 시도'));
       retry.addEventListener('click', () => { void this.renderBoard(host, difficulty, highlightId); });
       message.append(element('p', error instanceof Error ? error.message : '랭킹을 불러오지 못했습니다.'), retry);
-      host.replaceChildren(this.createPersonalBest(difficulty), message);
+      host.replaceChildren(this.createPersonalBest(difficulty, this.resultRecords.get(host)), message);
     } finally {
       if (this.requests.get(host) === generation) host.setAttribute('aria-busy', 'false');
     }
   }
 
-  /** @param {any} difficulty */
-  createPersonalBest(difficulty) {
+  /** @param {any} difficulty @param {any} [result] */
+  createPersonalBest(difficulty, result = null) {
     const section = element('section', '', 'personal-best');
-    section.setAttribute('aria-label', '이 브라우저의 최고 기록');
+    section.setAttribute('aria-label', result ? '이번 플레이 결과' : '이 브라우저의 최고 기록');
     const heading = element('div', '', 'personal-best-heading');
-    heading.append(element('strong', difficulty.label), element('span', '내 최고 기록 · 이 브라우저'));
+    heading.append(element('strong', difficulty.label), element('span', result ? '이번 플레이' : '내 최고 기록 · 이 브라우저'));
     section.append(heading);
-    const best = this.repository.getBestResult(this.key(difficulty));
+    const best = result ?? this.repository.getBestResult(this.key(difficulty));
     if (!best || !Number.isFinite(best.score)) {
       section.append(element('p', '아직 이 브라우저에 저장된 플레이 기록이 없습니다.', 'personal-best-note'));
       return section;
@@ -159,7 +160,7 @@ export class LeaderboardPresentation {
     }
     const scroll = element('div', '', 'leaderboard-table-scroll');
     scroll.append(table);
-    host.replaceChildren(this.createPersonalBest(difficulty), scroll);
+    host.replaceChildren(this.createPersonalBest(difficulty, this.resultRecords.get(host)), scroll);
   }
 
   /** @param {any} result @param {boolean} eligible */
@@ -171,6 +172,7 @@ export class LeaderboardPresentation {
     section.append(heading);
     const difficulty = this.song.difficulties.find((/** @type {any} */ entry) => entry.beatmapId === result.beatmapId);
     const host = element('div', '', 'leaderboard-scroll');
+    this.resultRecords.set(host, { ...result });
     this.resultHost = host;
     this.resultDifficulty = difficulty;
     this.highlightId = null;
