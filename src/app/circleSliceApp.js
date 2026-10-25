@@ -500,6 +500,7 @@ export class CircleSliceApp {
     const renderer = new PlayfieldRenderer(context, mapper, skin);
     renderer.setHitObjects(objects);
     renderer.setBackground(skin.get('background'));
+    renderer.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     renderer.setVisualSettings(this.settings);
     if (storyboard && this.settings.storyboardEnabled) renderer.setStoryboard(storyboard, storyboardResources.images);
     const storyboardSamples = storyboard && this.settings.storyboardEnabled
@@ -558,7 +559,7 @@ export class CircleSliceApp {
       for (const event of events) {
         if (Number.isFinite(event.hitErrorMs)) lastTimingErrorMs = event.hitErrorMs;
         const object = feedbackObjects.get(event.objectId);
-        renderer.pushHitFeedback(createHitFeedback(event, object, currentTimeMs));
+        renderer.pushHitFeedback(createHitFeedback(event, object, currentTimeMs, windows));
         const eventMapTimeMs = Number.isFinite(event.mapTimeMs) ? event.mapTimeMs : currentTimeMs;
         const sampleContext = sampleContextAt(beatmap.samplePoints, eventMapTimeMs, object ?? {});
         for (const request of hitSoundRequests(event, object ?? {}, sampleContext)) {
@@ -586,6 +587,7 @@ export class CircleSliceApp {
     };
     /** @param {number} mapTimeMs */
     const render = (mapTimeMs) => {
+      renderer.setMusicAnalysis(this.audio.getMusicAnalysis());
       renderer.setCursor(input.playfieldPosition, mapTimeMs);
       renderer.setHudState({
         score: gameplay.score, accuracy: hudAccuracy(gameplay.accuracy, gameplay.judgements), combo: gameplay.combo,

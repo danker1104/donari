@@ -36,6 +36,17 @@ export class AudioEngine {
     this.musicVolume = 1;
     /** @type {Map<any,()=>void>} */
     this.effectSources = new Map();
+    /** @type {AnalyserNode|null} */
+    this.musicAnalyser = null;
+    this.musicWaveform = new Float32Array(1024);
+    this.musicFrequencies = new Uint8Array(512);
+    this.musicAnalysis = { level: 0, bass: 0, burst: 0, bands: new Float32Array(32) };
+    this.musicEnergyBaseline = 0;
+    this.musicEnergyInitialized = false;
+    this.lastMusicBurstTime = -Infinity;
+    /** @type {Array<{start:number,end:number}>} */
+    this.musicBandRanges = [];
+    this.lastMusicAnalysisTime = -Infinity;
   }
 
   async unlockFromGesture() {
@@ -46,6 +57,18 @@ export class AudioEngine {
       this.storyGain = this.context.createGain();
       this.masterGain = this.context.createGain();
       this.musicGain.connect(this.masterGain);
+      this.musicAnalyser = this.context.createAnalyser();
+      this.musicAnalyser.fftSize = 1024;
+      this.musicAnalyser.smoothingTimeConstant = 0.65;
+      // A side branch observes only music; it never routes a second audible signal.
+      this.musicGain.connect(this.musicAnalyser);
+      const binHz = this.context.sampleRate / this.musicAnalyser.fftSize;
+      const maximumHz = Math.min(16000, this.context.sampleRate / 2);
+      this.musicBandRanges = Array.from({ length: this.musicAnalysis.bands.length }, (_, index) => {
+        const start = Math.min(511, Math.max(1, Math.floor(30 * (maximumHz / 30) ** (index / 32) / binHz)));
+        const end = Math.min(512, Math.max(start + 1, Math.ceil(30 * (maximumHz / 30) ** ((index + 1) / 32) / binHz)));
+        return { start, end };
+      });
       this.effectGain.connect(this.masterGain);
       this.storyGain.connect(this.masterGain);
       this.masterGain.connect(this.context.destination);
@@ -54,6 +77,65 @@ export class AudioEngine {
     }
     if (this.context.state !== 'running') await this.context.resume();
     if (this.context.state !== 'running') throw new Error(`AUDIO_CONTEXT_NOT_RUNNING: ${this.context.state}`);
+  }
+
+  getMusicAnalysis() {
+    const analyser = this.musicAnalyser;
+    if (!analyser || !this.musicSource || this.context?.state !== 'running' || this.masterGain.gain.value <= 0) {
+      this.resetMusicAnalysis();
+      return this.musicAnalysis;
+    }
+    const now = this.context.currentTime;
+    const elapsed = now - this.lastMusicAnalysisTime;
+    if (elapsed < 1 / 30) return this.musicAnalysis;
+    this.lastMusicAnalysisTime = now;
+    const delta = Math.min(0.1, elapsed);
+    const volume = Math.max(0, Math.min(1, this.masterGain.gain.value));
+    analyser.getFloatTimeDomainData(this.musicWaveform);
+    analyser.getByteFrequencyData(this.musicFrequencies);
+    let energy = 0;
+    for (const sample of this.musicWaveform) energy += sample * sample;
+    const rms = Math.sqrt(energy / this.musicWaveform.length) * volume;
+    const target = Math.min(1, rms * 2.5);
+    this.musicAnalysis.burst *= Math.exp(-delta * 7);
+    if (this.musicEnergyInitialized && rms > 0.12 && now - this.lastMusicBurstTime >= 0.22) {
+      const rise = rms - this.musicEnergyBaseline;
+      const onset = Math.min(1, Math.max(0, (rise - 0.04) * 5));
+      if (onset > 0.15 && rms > this.musicEnergyBaseline * 1.25) {
+        this.musicAnalysis.burst = Math.max(this.musicAnalysis.burst, onset);
+        this.lastMusicBurstTime = now;
+      }
+    }
+    if (!this.musicEnergyInitialized) {
+      this.musicEnergyBaseline = rms;
+      this.musicEnergyInitialized = true;
+    } else {
+      this.musicEnergyBaseline += (rms - this.musicEnergyBaseline) * (1 - Math.exp(-delta * 3));
+    }
+    const rate = target > this.musicAnalysis.level ? 18 : 6;
+    this.musicAnalysis.level += (target - this.musicAnalysis.level) * (1 - Math.exp(-delta * rate));
+    let bass = 0;
+    for (let index = 0; index < this.musicBandRanges.length; index += 1) {
+      const { start, end } = this.musicBandRanges[index];
+      let sum = 0;
+      for (let bin = start; bin < end; bin += 1) sum += this.musicFrequencies[bin];
+      const band = sum / ((end - start) * 255) * volume;
+      this.musicAnalysis.bands[index] += (band - this.musicAnalysis.bands[index]) * (1 - Math.exp(-delta * 12));
+      if (index < 8) bass += this.musicAnalysis.bands[index];
+    }
+    this.musicAnalysis.bass = bass / 8;
+    return this.musicAnalysis;
+  }
+
+  resetMusicAnalysis() {
+    this.musicAnalysis.level = 0;
+    this.musicAnalysis.bass = 0;
+    this.musicAnalysis.burst = 0;
+    this.musicAnalysis.bands.fill(0);
+    this.lastMusicAnalysisTime = -Infinity;
+    this.musicEnergyBaseline = 0;
+    this.musicEnergyInitialized = false;
+    this.lastMusicBurstTime = -Infinity;
   }
 
   handleContextStateChange() {
@@ -268,6 +350,7 @@ export class AudioEngine {
   }
 
   stopMusicSource() {
+    this.resetMusicAnalysis();
     if (!this.musicSource) return;
     try {
       this.musicSource.stop();

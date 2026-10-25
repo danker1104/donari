@@ -9,6 +9,7 @@ import { layoutComboDigits, sliderHeadShowsCombo } from './comboNumber.js';
 import { HitFeedbackTimeline } from './hitFeedback.js';
 import { comboColourCss, followPointSprites, reverseArrowAngle } from './hitObjectVisuals.js';
 import { gameplayHudLayout, scoreGlyphs } from './gameplayHud.js';
+import { drawMusicBackground, musicBackgroundTransform } from './musicBackground.js';
 
 export class PlayfieldRenderer {
   /** @param {CanvasRenderingContext2D} context @param {import('../input/coordinateMapper.js').CoordinateMapper} mapper @param {import('../skin/skinManager.js').SkinManager} skin */
@@ -20,6 +21,9 @@ export class PlayfieldRenderer {
     /** @type {CanvasImageSource|null} */
     this.background = null;
     this.backgroundDim = 0.65;
+    /** @type {import('./musicBackground.js').MusicAnalysis|null} */
+    this.musicAnalysis = null;
+    this.reducedMotion = false;
     this.cursorPosition = { x: 256, y: 192 };
     this.cursorScale = 1;
     this.cursorTrailEnabled = true;
@@ -46,6 +50,9 @@ export class PlayfieldRenderer {
 
   /** @param {CanvasImageSource|null} image */
   setBackground(image) { this.background = image; }
+
+  /** @param {import('./musicBackground.js').MusicAnalysis} analysis */
+  setMusicAnalysis(analysis) { this.musicAnalysis = analysis; }
 
   /** @param {any} storyboard @param {Map<string,CanvasImageSource>} images */
   setStoryboard(storyboard, images) {
@@ -102,11 +109,18 @@ export class PlayfieldRenderer {
   render(objects, mapTimeMs, preemptMs) {
     const commands = [];
     let activeStoryboardCount = 0;
-    commands.push({ layer: RenderLayer.BACKGROUND, draw: (/** @type {CanvasRenderingContext2D} */ context) => this.drawBackground(context) });
+    commands.push({ layer: RenderLayer.BACKGROUND, draw: (/** @type {CanvasRenderingContext2D} */ context) => this.drawBackground(context, mapTimeMs) });
     if (this.storyboard && this.storyboardRenderer) {
       const active = activeStoryboardObjects(this.storyboard, mapTimeMs, 'playing');
       activeStoryboardCount = active.length;
       commands.push(...this.storyboardRenderer.createDrawCommands(active));
+    }
+    if (this.musicAnalysis && !this.reducedMotion) {
+      const analysis = this.musicAnalysis;
+      commands.push({
+        layer: RenderLayer.MUSIC_BACKGROUND,
+        draw: (/** @type {CanvasRenderingContext2D} */ context) => drawMusicBackground(context, this.mapper.cssWidth, this.mapper.cssHeight, analysis, mapTimeMs),
+      });
     }
     commands.push({
       layer: RenderLayer.BACKGROUND_DIM,
@@ -315,17 +329,18 @@ export class PlayfieldRenderer {
     context.restore();
   }
 
-  /** @param {CanvasRenderingContext2D} context */
-  drawBackground(context) {
+  /** @param {CanvasRenderingContext2D} context @param {number} [mapTimeMs] */
+  drawBackground(context, mapTimeMs = 0) {
     context.fillStyle = '#090713';
     context.fillRect(0, 0, this.mapper.cssWidth, this.mapper.cssHeight);
     if (!this.background) return;
     const imageWidth = Number(/** @type {any} */ (this.background).width);
     const imageHeight = Number(/** @type {any} */ (this.background).height);
-    const scale = Math.max(this.mapper.cssWidth / imageWidth, this.mapper.cssHeight / imageHeight);
+    const motion = musicBackgroundTransform(this.musicAnalysis, mapTimeMs, this.reducedMotion);
+    const scale = Math.max(this.mapper.cssWidth / imageWidth, this.mapper.cssHeight / imageHeight) * motion.zoom;
     const width = imageWidth * scale;
     const height = imageHeight * scale;
-    context.drawImage(this.background, (this.mapper.cssWidth - width) / 2, (this.mapper.cssHeight - height) / 2, width, height);
+    context.drawImage(this.background, (this.mapper.cssWidth - width) / 2 + motion.x, (this.mapper.cssHeight - height) / 2 + motion.y, width, height);
   }
 
   /** @param {CanvasRenderingContext2D} context @param {any} command */
@@ -365,37 +380,60 @@ export class PlayfieldRenderer {
     context.fillText(String(value), center.x, center.y);
   }
 
-  /** @param {CanvasRenderingContext2D} context @param {any} effect */
+  /** @param {CanvasRenderingContext2D} context @param {import('./hitFeedback.js').HitFeedbackEffect & {progress:number}} effect */
   drawHitFeedback(context, effect) {
     const center = this.mapper.playfieldToScreen(effect.position);
     const radius = (effect.radius ?? 36) * this.mapper.scale;
-    const fade = 1 - effect.progress;
-    const pulseRadius = radius * (0.75 + effect.progress * 1.45);
+    const progress = effect.progress;
+    const fade = (1 - progress) ** 2;
+    const travel = 1 - (1 - progress) ** 3;
+    const pulseRadius = radius * (0.55 + travel * 1.15);
     const resultImage = effect.assetName ? this.skin.get(effect.assetName) : null;
-    if (resultImage) {
-      const size = radius * 2.4 * (1 + effect.progress * 0.08);
-      context.save(); context.globalAlpha = fade;
-      context.drawImage(resultImage, center.x - size / 2, center.y - size / 2, size, size); context.restore();
-      return;
-    }
     context.save();
+    context.translate(center.x, center.y);
     context.globalCompositeOperation = 'lighter';
-    context.globalAlpha = fade * effect.strength * 0.8;
+    context.globalAlpha = fade * effect.strength;
     context.strokeStyle = effect.tone;
-    context.lineWidth = Math.max(2, radius * 0.14 * fade);
-    context.beginPath(); context.arc(center.x, center.y, pulseRadius, 0, Math.PI * 2); context.stroke();
-    context.globalAlpha = fade * effect.strength * 0.22;
     context.fillStyle = effect.tone;
-    context.beginPath(); context.arc(center.x, center.y, radius * (0.5 + effect.progress), 0, Math.PI * 2); context.fill();
-    context.globalAlpha = fade * effect.strength * 0.7;
-    for (let index = 0; index < 8; index += 1) {
-      const angle = index * Math.PI / 4;
-      const inner = radius * (0.55 + effect.progress * 0.45);
-      const outer = inner + radius * (0.35 + effect.strength * 0.35) * fade;
-      context.beginPath(); context.moveTo(center.x + Math.cos(angle) * inner, center.y + Math.sin(angle) * inner);
-      context.lineTo(center.x + Math.cos(angle) * outer, center.y + Math.sin(angle) * outer); context.stroke();
+    context.lineWidth = Math.max(1.5, radius * 0.075 * (1 - progress));
+    context.beginPath(); context.arc(0, 0, pulseRadius, 0, Math.PI * 2); context.stroke();
+    if (effect.grade === 'miss') {
+      const size = radius * (0.25 + travel * 0.2);
+      context.beginPath(); context.moveTo(-size, -size); context.lineTo(size, size);
+      context.moveTo(size, -size); context.lineTo(-size, size); context.stroke();
+    } else {
+      if (effect.kind === 'repeat' || effect.kind === 'tail' || effect.kind === 'judgement') {
+        context.globalAlpha = fade * effect.strength * 0.55;
+        context.beginPath(); context.arc(0, 0, pulseRadius * 0.72, 0, Math.PI * 2); context.stroke();
+      }
+      context.globalAlpha = fade * effect.strength * 0.12;
+      context.beginPath(); context.arc(0, 0, radius * (0.45 + travel * 0.4), 0, Math.PI * 2); context.fill();
+      context.globalAlpha = fade * effect.strength * 0.9;
+      const phase = effect.startTimeMs * 0.01;
+      for (let index = 0; index < effect.particles; index += 1) {
+        const angle = phase + index * Math.PI * 2 / effect.particles;
+        const distance = radius * (0.4 + travel * (index % 2 === 0 ? 1.35 : 1.05));
+        const length = radius * (0.12 + effect.strength * 0.16) * (1 - progress);
+        const x = Math.cos(angle);
+        const y = Math.sin(angle);
+        context.beginPath(); context.moveTo(x * distance, y * distance);
+        context.lineTo(x * (distance + length), y * (distance + length)); context.stroke();
+      }
+      if (effect.kind === 'head' || effect.kind === 'repeat') {
+        const size = radius * (0.22 + travel * 0.15);
+        context.beginPath();
+        context.moveTo(0, -size); context.lineTo(size, 0); context.lineTo(0, size);
+        context.lineTo(-size, 0); context.closePath(); context.stroke();
+      }
     }
     context.restore();
+    if (resultImage) {
+      const size = radius * 2.1 * (1 + travel * 0.08);
+      context.save();
+      context.globalAlpha = 1 - progress;
+      context.drawImage(resultImage, center.x - size / 2, center.y - size / 2 - radius * progress * 0.25, size, size);
+      context.restore();
+    }
   }
 
   /** @param {CanvasRenderingContext2D} context */
