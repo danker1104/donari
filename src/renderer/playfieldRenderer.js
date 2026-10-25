@@ -537,9 +537,9 @@ export class PlayfieldRenderer {
   drawCursor(context) {
     const center = this.mapper.playfieldToScreen(this.cursorPosition);
     const image = this.skin.getRole?.('cursor') ?? this.skin.get('cursor.png');
-    const radius = 20 * this.cursorScale;
+    const radius = 40 * this.cursorScale;
     if (image) context.drawImage(image, center.x - radius, center.y - radius, radius * 2, radius * 2);
-    else { context.fillStyle = '#fff'; context.beginPath(); context.arc(center.x, center.y, 8 * this.cursorScale, 0, Math.PI * 2); context.fill(); }
+    else { context.fillStyle = '#fff'; context.beginPath(); context.arc(center.x, center.y, 16 * this.cursorScale, 0, Math.PI * 2); context.fill(); }
   }
 
   /** @param {CanvasRenderingContext2D} context */
