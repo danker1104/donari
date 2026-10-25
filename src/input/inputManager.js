@@ -17,10 +17,16 @@ export class InputManager {
    *   mapper: {screenToPlayfield:(point:{x:number,y:number})=>{x:number,y:number}},
    *   requestPause: (reason:string)=>void,
    *   keyBindings?: [string,string],
+   *   sensitivity?: number,
+   *   correctAim?: (point:{x:number,y:number},timeMs:number)=>{x:number,y:number},
    *   onMetric?: (name:'INPUT_TIMESTAMP_FALLBACK')=>void,
    * }} options
    */
   constructor(options) {
+    this.sensitivity = options.sensitivity ?? 1;
+    this.correctAim = options.correctAim ?? ((point) => point);
+    /** @type {{x:number,y:number}|null} */
+    this.lastPointerPosition = null;
     this.clock = options.clock;
     this.mapper = options.mapper;
     this.requestPause = options.requestPause;
@@ -58,11 +64,24 @@ export class InputManager {
   /** @param {any} event @param {{left:number,top:number}} [rect] */
   updatePointerPosition(event, rect = event.currentTarget?.getBoundingClientRect?.() ?? { left: 0, top: 0 }) {
     if (!Number.isFinite(event.clientX) || !Number.isFinite(event.clientY)) return;
-    this.setCursorScreenPosition({ x: event.clientX - rect.left, y: event.clientY - rect.top });
+    const position = { x: event.clientX - rect.left, y: event.clientY - rect.top };
+    if (this.lastPointerPosition && this.active) {
+      const mapper = /** @type {any} */ (this.mapper);
+      this.setCursorScreenPosition({
+        x: Math.max(0, Math.min(mapper.cssWidth ?? Infinity, this.cursorScreenPosition.x + (position.x - this.lastPointerPosition.x) * this.sensitivity)),
+        y: Math.max(0, Math.min(mapper.cssHeight ?? Infinity, this.cursorScreenPosition.y + (position.y - this.lastPointerPosition.y) * this.sensitivity)),
+      });
+    } else this.setCursorScreenPosition(position);
+    this.lastPointerPosition = position;
   }
 
   get playfieldPosition() {
-    return this.mapper.screenToPlayfield(this.cursorScreenPosition);
+    return this.positionAt(this.clock.getMapTimeMs());
+  }
+
+  /** @param {number} timeMs */
+  positionAt(timeMs) {
+    return this.correctAim(this.mapper.screenToPlayfield(this.cursorScreenPosition), timeMs);
   }
 
   /** @param {any} event @param {{left:number,top:number}} [rect] */
@@ -70,7 +89,7 @@ export class InputManager {
     this.updatePointerPosition(event, rect);
     if (!this.active || !Number.isFinite(event.timeStamp)) return;
     const time = this.mapEventTimestamp(event.timeStamp);
-    this.state.move(time.mapTimeMs, this.playfieldPosition);
+    this.state.move(time.mapTimeMs, this.positionAt(time.mapTimeMs));
   }
 
   /** @param {any} event */
@@ -117,14 +136,14 @@ export class InputManager {
   /** @param {import('./inputState.js').InputChannel} channel @param {number} timestamp */
   press(channel, timestamp) {
     const time = this.mapEventTimestamp(timestamp);
-    const transition = this.state.press(channel, time.mapTimeMs, this.playfieldPosition);
+    const transition = this.state.press(channel, time.mapTimeMs, this.positionAt(time.mapTimeMs));
     if (transition) this.pressCounts[channel] += 1;
   }
 
   /** @param {import('./inputState.js').InputChannel} channel @param {number} timestamp */
   release(channel, timestamp) {
     const time = this.mapEventTimestamp(timestamp);
-    this.state.release(channel, time.mapTimeMs, this.playfieldPosition);
+    this.state.release(channel, time.mapTimeMs, this.positionAt(time.mapTimeMs));
   }
 
   /** @param {number} timestamp */

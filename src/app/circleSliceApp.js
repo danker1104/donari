@@ -1,3 +1,4 @@
+import { assistAim } from '../input/aimAssist.js';
 // @ts-check
 
 import { AudioEngine } from '../audio/audioEngine.js';
@@ -509,9 +510,18 @@ export class CircleSliceApp {
     this.storyboardSamples = storyboardSamples;
     const sliderSounds = new SliderSoundController(this.audio, effects);
     const spinnerSounds = new SpinnerSoundController(this.audio, effects);
+    const aimCandidates = [
+      ...scheduler.circles.circles.map(object => ({ object, available: () => !object.resolved })),
+      ...scheduler.sliders.map(object => ({ object, available: () => object.parts.find(part => part.kind === 'head')?.result === null })),
+    ].sort((a, b) => a.object.startTimeMs - b.object.startTimeMs || a.object.id - b.object.id);
     const input = new InputManager({
       clock: this.audio.clock,
       mapper,
+      sensitivity: 1.27,
+      correctAim: (point, timeMs) => {
+        const candidate = aimCandidates.find(entry => entry.available() && Math.abs(timeMs - entry.object.startTimeMs) <= windows.hit50);
+        return assistAim(point, candidate?.object ?? null, timeMs, windows.hit50);
+      },
       requestPause: (reason) => this.pause(reason),
       onMetric: (name) => diagnostics.increment(name),
       keyBindings: /** @type {[string,string]} */ (this.settings.keyBindings),
