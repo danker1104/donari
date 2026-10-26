@@ -1,3 +1,4 @@
+import { SensitivityTrainer } from '../ui/sensitivityTrainer.js';
 import { assistAim } from '../input/aimAssist.js';
 // @ts-check
 
@@ -227,6 +228,24 @@ export class CircleSliceApp {
 
   bindUi() {
     const byId = (/** @type {string} */ id) => document.getElementById(id);
+    const savedSensitivity = byId('saved-sensitivity');
+    const updateSensitivityLabel = () => { if (savedSensitivity) savedSensitivity.textContent = `${this.settings.mouseSensitivity.toFixed(2)}배`; };
+    const trainer = new SensitivityTrainer({
+      settings: () => this.settings,
+      circleSize: () => this.difficultyModels.get(this.elements.select.value)?.circleSize ?? 3.5,
+      loadSkin: () => this.loadPracticeSkin(),
+      apply: (value) => {
+        this.settings = this.repository.saveSettings({ ...this.settings, mouseSensitivity: value });
+        this.applyLiveSettings();
+        updateSensitivityLabel();
+      },
+    });
+    byId('sensitivity-test-button')?.addEventListener('click', () => {
+      if (this.scene.current !== 'DIFFICULTY_SELECT') return;
+      this.stopPreview(true);
+      trainer.open();
+    });
+    updateSensitivityLabel();
     this.elements.dialog.addEventListener('cancel', (event) => {
       event.preventDefault();
       if (this.scene.current === 'PAUSED') void this.resume();
@@ -389,10 +408,33 @@ export class CircleSliceApp {
     button.setAttribute('aria-pressed', String(this.previewPlaying));
   }
 
+  async loadPracticeSkin() {
+    if (this.loadedSession?.skin) return this.loadedSession.skin;
+    if (!this.practiceSkinPromise) {
+      this.practiceSkinPromise = (async () => {
+        const entry = this.skinCatalogEntry;
+        const [manifest, response] = await Promise.all([
+          loadManifest(this.fetcher, resolvePublicAsset(this.baseUrl, entry.root, entry.manifest)),
+          this.fetcher(resolvePublicAsset(this.baseUrl, entry.root, entry.config)),
+        ]);
+        if (!response.ok) throw new Error('스킨 설정을 불러오지 못했습니다.');
+        const skin = new SkinManager(this.fetcher);
+        const config = skin.configure(await response.text());
+        const plan = buildStandardSkinPlan(manifest, config, { highResolution: window.devicePixelRatio > 1 });
+        skin.configureRoles(plan.roles);
+        await skin.loadPlannedImages(skinAssetsForGroups(plan, ['gameplay', 'hitCircleNumbers', 'cursor', 'judgements']), new Set(plan.required), name => resolvePublicAsset(this.baseUrl, entry.root, name));
+        await skin.loadImage('background', resolvePublicAsset(this.baseUrl, this.song.root, this.song.background));
+        return skin;
+      })().catch(error => { this.practiceSkinPromise = null; throw error; });
+    }
+    return this.practiceSkinPromise;
+  }
+
   applyLiveSettings() {
     if (this.audio.context) this.audio.setVolumes({ master: this.settings.masterVolume, music: this.settings.musicVolume, effect: this.settings.effectVolume, storyboard: this.settings.storyboardVolume });
     if (this.audio.clock) this.audio.clock.setOffset(this.settings.offsetMs);
     this.session?.renderer.setVisualSettings(this.settings);
+    if (this.input) this.input.sensitivity = this.settings.mouseSensitivity;
     if (this.debugHud) this.debugHud.hidden = !(this.debugEnabled || this.settings.fpsEnabled);
   }
 
@@ -517,7 +559,7 @@ export class CircleSliceApp {
     const input = new InputManager({
       clock: this.audio.clock,
       mapper,
-      sensitivity: 1.27,
+      sensitivity: this.settings.mouseSensitivity,
       correctAim: (point, timeMs) => {
         const candidate = aimCandidates.find(entry => entry.available() && Math.abs(timeMs - entry.object.startTimeMs) <= windows.hit50);
         return assistAim(point, candidate?.object ?? null, timeMs, windows.hit50);

@@ -38,12 +38,29 @@
           <div class="selection-detail-heading"><span>난이도 정보</span><strong id="selected-difficulty-name">INSANE</strong></div>
           <p id="stage-status" aria-live="polite">카탈로그를 준비하고 있습니다.</p>
           <dl id="difficulty-stats" class="difficulty-stats" aria-live="polite"></dl>
+          <button id="sensitivity-test-button" class="sensitivity-test-button" type="button" aria-haspopup="dialog" aria-controls="sensitivity-dialog">감도 테스트 · <span id="saved-sensitivity">1.00배</span></button>
           <div class="play-actions">
             <button id="preview-button" class="preview-button" type="button" disabled>미리듣기</button>
             <button id="start-button" type="button" disabled>콘텐츠 준비 중</button>
           </div>
         </section>
       </section>
+      <dialog id="sensitivity-dialog" class="sensitivity-dialog" aria-labelledby="sensitivity-title" aria-describedby="sensitivity-help">
+        <canvas id="sensitivity-canvas" aria-label="감도 연습 영역: 멀리 떨어진 원과 긴 슬라이더"></canvas>
+        <header class="sensitivity-trainer-header">
+          <div><h2 id="sensitivity-title">나에게 맞는 감도 찾기</h2><p id="sensitivity-help">멀리 있는 원은 클릭 / Z·X · 슬라이더는 누른 채 공을 따라가세요.</p></div>
+          <button id="sensitivity-close" type="button" aria-label="감도 테스트 닫기">닫기</button>
+        </header>
+        <footer class="sensitivity-trainer-panel">
+          <p id="sensitivity-status" role="status"></p>
+          <p id="sensitivity-stats"></p>
+          <div class="sensitivity-control">
+            <label for="mouse-sensitivity">마우스 감도 <output id="mouse-sensitivity-value" for="mouse-sensitivity">1.00배</output></label>
+            <div class="sensitivity-control__slider"><span aria-hidden="true">1.00배</span><input id="mouse-sensitivity" type="range" min="1" max="1.5" step="0.01" value="1"><span aria-hidden="true">1.50배</span><button id="mouse-sensitivity-reset" type="button">기본값</button></div>
+          </div>
+          <div class="sensitivity-trainer-actions"><span>연습 전용 · 점수 및 랭킹에 반영되지 않습니다</span><button id="sensitivity-restart" type="button">다시 테스트</button><button id="sensitivity-apply" type="button">이 감도 적용</button></div>
+        </footer>
+      </dialog>
       <dialog id="flow-dialog" aria-labelledby="dialog-title">
         <img id="dialog-panel-artwork" class="dialog-panel-artwork" width="1280" height="720" alt="" aria-hidden="true">
         <img id="dialog-artwork" class="dialog-artwork" width="320" height="240" alt="" aria-hidden="true">
