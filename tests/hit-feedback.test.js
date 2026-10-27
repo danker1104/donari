@@ -54,7 +54,7 @@ test('slider head, intermediate ticks, repeats and tail have positioned hit and 
 
 test('slider head color follows the actual timing windows including early and late hits', () => {
   const windows = getHitWindows(8.5);
-  for (const [error, grade] of [[0, '300'], [44.25, '300'], [44.26, '100'], [90, '100'], [90.01, '50']]) {
+  for (const [error, grade] of [[0, '300'], [44.25, '300'], [44.26, '100'], [150, '100'], [150.01, '50'], [263.75, '50']]) {
     for (const sign of [-1, 1]) {
       const effect = createHitFeedback({
         type: 'slider-part', kind: 'head', partId: 'head-0', result: 'hit', hitErrorMs: error * sign,

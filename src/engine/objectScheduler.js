@@ -42,7 +42,12 @@ export class ObjectScheduler {
     ]
       .filter((candidate) => Math.abs(transition.mapTimeMs - candidate.object.startTimeMs) <= this.windows.hit50)
       .sort((left, right) => left.object.startTimeMs - right.object.startTimeMs || left.object.id - right.object.id);
-    const candidate = candidates[0];
+    // An earlier note elsewhere must not swallow a press on this note.
+    const candidate = candidates.find(({ kind, object }) => {
+      const position = kind === 'slider' ? sliderHeadPart(object)?.position ?? object.position : object.position;
+      return Math.hypot(transition.playfieldPosition.x - position.x,
+        transition.playfieldPosition.y - position.y) <= object.radius;
+    });
     if (!candidate) {
       this.onDiagnostic({
         event: 'judgement_press',
