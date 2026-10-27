@@ -120,7 +120,7 @@ export class CircleSliceApp {
     this.updateDifficultyStats();
     this.renderDifficultyRail();
     this.elements.startButton.disabled = false;
-    this.elements.startButton.textContent = 'Standard 플레이 시작';
+    this.elements.startButton.textContent = '플레이 시작';
     this.elements.startButton.onclick = () => { void this.start(); };
     const previewButton = /** @type {HTMLButtonElement|null} */ (document.getElementById('preview-button'));
     if (previewButton) previewButton.disabled = false;
@@ -221,7 +221,7 @@ export class CircleSliceApp {
       if (!this.loading.isCurrent(load.id)) return;
       this.transitionTo('DIFFICULTY_SELECT');
       this.elements.startButton.disabled = false;
-      this.elements.startButton.textContent = 'Standard 플레이 시작';
+      this.elements.startButton.textContent = '플레이 시작';
       this.setStatus(`시작 실패: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
@@ -279,6 +279,16 @@ export class CircleSliceApp {
     });
     window.addEventListener('keydown', (event) => {
       if (this.leaderboard.dialog.open) return;
+      if (event.key === 'Enter' && this.scene.current === 'DIFFICULTY_SELECT') {
+        const target = event.target instanceof Element ? event.target : null;
+        const button = target?.closest('button');
+        if (document.querySelector('dialog[open]') ||
+            target?.closest('input, textarea, [contenteditable]:not([contenteditable="false"])') ||
+            (button && button !== this.elements.startButton && !button.hasAttribute('data-difficulty-id'))) return;
+        event.preventDefault();
+        if (!event.repeat && !this.elements.startButton.disabled) this.elements.startButton.click();
+        return;
+      }
       const direction = difficultyDirectionForKey(this.scene.current, event.key);
       if (direction !== 0) {
         event.preventDefault();
@@ -819,7 +829,7 @@ export class CircleSliceApp {
     document.body.classList.remove('is-playing', 'is-gameflow');
     this.elements.dialog.close();
     this.elements.startButton.disabled = false;
-    this.elements.startButton.textContent = 'Standard 플레이 시작';
+    this.elements.startButton.textContent = '플레이 시작';
     this.updatePreviewButton();
     this.renderDifficultyRail();
     this.setStatus('난이도를 선택하고 플레이를 시작하세요.');
