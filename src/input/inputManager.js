@@ -19,12 +19,14 @@ export class InputManager {
    *   keyBindings?: [string,string],
    *   sensitivity?: number,
    *   correctAim?: (point:{x:number,y:number},timeMs:number)=>{x:number,y:number},
+   *   correctMovement?: (previous:{x:number,y:number},next:{x:number,y:number},timeMs:number)=>{x:number,y:number},
    *   onMetric?: (name:'INPUT_TIMESTAMP_FALLBACK')=>void,
    * }} options
    */
   constructor(options) {
     this.sensitivity = options.sensitivity ?? 1;
     this.correctAim = options.correctAim ?? ((point) => point);
+    this.correctMovement = options.correctMovement ?? ((_previous, next) => next);
     /** @type {{x:number,y:number}|null} */
     this.lastPointerPosition = null;
     this.clock = options.clock;
@@ -67,10 +69,13 @@ export class InputManager {
     const position = { x: event.clientX - rect.left, y: event.clientY - rect.top };
     if (this.lastPointerPosition && this.active) {
       const mapper = /** @type {any} */ (this.mapper);
-      this.setCursorScreenPosition({
+      const next = {
         x: Math.max(0, Math.min(mapper.cssWidth ?? Infinity, this.cursorScreenPosition.x + (position.x - this.lastPointerPosition.x) * this.sensitivity)),
         y: Math.max(0, Math.min(mapper.cssHeight ?? Infinity, this.cursorScreenPosition.y + (position.y - this.lastPointerPosition.y) * this.sensitivity)),
-      });
+      };
+      const time = Number.isFinite(event.timeStamp)
+        ? this.mapEventTimestamp(event.timeStamp).mapTimeMs : this.clock.getMapTimeMs();
+      this.setCursorScreenPosition(this.correctMovement(this.cursorScreenPosition, next, time));
     } else this.setCursorScreenPosition(position);
     this.lastPointerPosition = position;
   }

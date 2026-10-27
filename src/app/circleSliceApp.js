@@ -1,5 +1,5 @@
 import { SensitivityTrainer } from '../ui/sensitivityTrainer.js';
-import { assistAim } from '../input/aimAssist.js';
+import { assistAim, brakeAimMovement, usesSmoothAim } from '../input/aimAssist.js';
 // @ts-check
 
 import { AudioEngine } from '../audio/audioEngine.js';
@@ -233,6 +233,7 @@ export class CircleSliceApp {
     const trainer = new SensitivityTrainer({
       settings: () => this.settings,
       circleSize: () => this.difficultyModels.get(this.elements.select.value)?.circleSize ?? 3.5,
+      difficulty: () => this.elements.select.value,
       loadSkin: () => this.loadPracticeSkin(),
       apply: (value) => {
         this.settings = this.repository.saveSettings({ ...this.settings, mouseSensitivity: value });
@@ -560,9 +561,16 @@ export class CircleSliceApp {
       clock: this.audio.clock,
       mapper,
       sensitivity: this.settings.mouseSensitivity,
-      correctAim: (point, timeMs) => {
+      correctMovement: (previous, next, timeMs) => {
         const candidate = aimCandidates.find(entry => entry.available() && Math.abs(timeMs - entry.object.startTimeMs) <= windows.hit50);
-        return assistAim(point, candidate?.object ?? null, timeMs, windows.hit50);
+        return mapper.playfieldToScreen(brakeAimMovement(
+          mapper.screenToPlayfield(previous), mapper.screenToPlayfield(next),
+          candidate?.object ?? null, timeMs, windows.hit50, beatmap.difficultyName));
+      },
+      correctAim: (point, timeMs) => {
+        if (usesSmoothAim(beatmap.difficultyName)) return point;
+        const candidate = aimCandidates.find(entry => entry.available() && Math.abs(timeMs - entry.object.startTimeMs) <= windows.hit50);
+        return assistAim(point, candidate?.object ?? null, timeMs, windows.hit50, beatmap.difficultyName);
       },
       requestPause: (reason) => this.pause(reason),
       onMetric: (name) => diagnostics.increment(name),

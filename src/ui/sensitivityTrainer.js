@@ -1,7 +1,7 @@
 // @ts-check
 import { InputManager } from '../input/inputManager.js';
 import { CoordinateMapper } from '../input/coordinateMapper.js';
-import { assistAim } from '../input/aimAssist.js';
+import { assistAim, brakeAimMovement, usesSmoothAim } from '../input/aimAssist.js';
 import { createPracticeNote, practiceSliderPosition } from '../input/sensitivityPractice.js';
 import { PlayfieldRenderer } from '../renderer/playfieldRenderer.js';
 import { createHitFeedback } from '../renderer/hitFeedback.js';
@@ -68,10 +68,16 @@ export class SensitivityTrainer {
     this.clock={getMapTimeMs:()=>performance.now(),eventTimestampToMapTime:(/** @type {number} */t)=>({mapTimeMs:t>1e12?t-performance.timeOrigin:t,fallback:false})};
     this.input=new InputManager({clock:this.clock,mapper:this.mapper,sensitivity:Number(this.range.value),
       keyBindings:this.options.settings().keyBindings,
+      correctMovement:(previous,next,time)=>{
+        if(!this.note||this.dragStarted!==null)return next;
+        return this.mapper.playfieldToScreen(brakeAimMovement(
+          this.mapper.screenToPlayfield(previous),this.mapper.screenToPlayfield(next),
+          {...this.note,startTimeMs:time},time,120,this.options.difficulty?.()));
+      },
       requestPause:()=>{if(this.input){this.input.state.clear(performance.now(),this.input.playfieldPosition);this.input.lastPointerPosition=null;}},
       correctAim:(point,time)=>{
-        if(!this.note||this.dragStarted!==null)return point;
-        return assistAim(point,{...this.note,startTimeMs:time},time,120);
+        if(!this.note||this.dragStarted!==null||usesSmoothAim(this.options.difficulty?.()))return point;
+        return assistAim(point,{...this.note,startTimeMs:time},time,120,this.options.difficulty?.());
       }});
     this.input.attach(this.canvas,window,document);
     this.input.setActive(true);
